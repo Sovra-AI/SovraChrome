@@ -1,4 +1,4 @@
-"""Exercise the actual toolbar action, side panel, native host and stdio MCP connection in Linux Chrome for Testing."""
+"""Exercise the actual toolbar action, side panel, native host and stdio MCP connection in Chrome for Testing."""
 import asyncio
 from contextlib import asynccontextmanager
 import json
@@ -180,7 +180,7 @@ async def exercise(ctx, call):
 
 async def run(directory, client=mcp_tools):
     config = directory / "config"
-    profile = config / "google-chrome-for-testing"
+    profile = directory / "profile"
     env = {**os.environ, "XDG_CONFIG_HOME": str(config), "SOVRA_CHROME_RUNTIME_DIR": str(directory / "run")}
     settings = json.loads(subprocess.check_output(
         [sys.executable, ROOT / "bridge/install.py", "--browser-config-dir", profile], env=env))

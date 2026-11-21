@@ -4,7 +4,7 @@ Let Sovra Harness work with the Chrome page you choose. It can read a snapshot, 
 
 ## Install from source
 
-Use desktop Chrome 116 or newer on Linux or macOS, Sovra Harness with **Connections → MCP servers**, Git and [uv](https://docs.astral.sh/uv/getting-started/installation/). The bridge uses a local Unix socket. Linux has an end-to-end browser test. Windows packaging is a future milestone.
+Use desktop Chrome 116 or newer on Linux or macOS, Sovra Harness with **Connections → MCP servers**, Git and [uv](https://docs.astral.sh/uv/getting-started/installation/). The bridge uses a local Unix socket. Windows packaging is a future milestone.
 
 1. Clone the project into a directory you intend to keep. Install the Python environment and register the companion for your Chrome installation.
 
@@ -57,7 +57,7 @@ To remove the integration, remove its connection in Sovra and its extension in C
 
 Edit the files in `extension/` and reload the extension at `chrome://extensions`. Restart its connection in Sovra after changing `bridge/`. The research note explains the transport choice, permission model, session lifetime and distribution tradeoffs. [Design and research](docs/research.md)
 
-Run the integration tests from the checkout. The browser test uses a temporary profile and per-test native host registration on Linux.
+Run the integration tests from the checkout. The browser test uses a temporary Chrome for Testing profile and per-test native host registration. On macOS, run the final command without the Linux virtual display wrapper (`xvfb-run -a`).
 
 ```sh
 uv sync --frozen

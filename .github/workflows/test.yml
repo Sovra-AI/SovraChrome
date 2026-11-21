@@ -16,7 +16,8 @@ jobs:
           version: "0.12.9"
       - run: uv sync --frozen --python 3.12
       - run: .venv/bin/python -m unittest discover -s tests
-      - if: runner.os == 'Linux'
-        run: .venv/bin/playwright install --with-deps --no-shell chromium
+      - run: .venv/bin/playwright install --with-deps --no-shell chromium
       - if: runner.os == 'Linux'
         run: xvfb-run -a .venv/bin/python tests/browser.py
+      - if: runner.os == 'macOS'
+        run: .venv/bin/python tests/browser.py
