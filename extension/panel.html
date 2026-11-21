@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sovra for Chrome</title>
+  <link rel="stylesheet" href="panel.css">
+  <script type="module" src="panel.js"></script>
+</head>
+<body>
+  <header><span class="mark" aria-hidden="true">S</span><h1>Sovra Harness</h1></header>
+  <main>
+    <h2>Page sharing</h2>
+    <p>Sovra can read and scroll this page. You review each click and text entry here. Shared content can reach your configured model.</p>
+    <p id="status" role="status">Ready to share.</p>
+    <p class="origin" id="origin" dir="auto"></p>
+    <button id="share">Share this page</button>
+    <button id="stop" hidden>Stop sharing</button>
+    <section id="review" hidden aria-labelledby="review-title">
+      <h2 id="review-title">Review action</h2>
+      <p id="summary"></p>
+      <pre id="detail" dir="auto"></pre>
+      <div><button id="allow">Allow once</button> <button id="deny">Decline</button></div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Sovra for Chrome",
+  "version": "0.1.0",
+  "minimum_chrome_version": "116",
+  "description": "Share a page with Sovra Harness and review its browser actions in the side panel.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnU7Q6G/oFeqt+2QFY0ErQ4dcD/G+lOMTcwTzVNchX5HZT4tcBiGWqywbTIzpHsrcuciaAlvHYYc3CRhyl9mFEe645FcjhPyElaDjhAoaA2wRKr2kx0aJL/g64rjeXqZU00zqTGDhvCw2KeFN5H45T5ZYsETeh00e3pkiIBTv8E19D0Xp3DDPOOyNFu7AGJKne4EsijvQyHOS90QrytUKW7Jv+MgYJ6BjQehM3F0+RWkDXaF5N54YpYr88cq4cs/Vv9c47H4UqBcNS+V1ZhTbexAENg0fqavtfbjuOiwZv/lDR3wYSpHPoPUTM0wWXHTS3ARRPhmOlf7+kL7YE+bmywIDAQAB",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "nativeMessaging",
+    "sidePanel"
+  ],
+  "action": {
+    "default_title": "Open Sovra for Chrome"
+  },
+  "background": {
+    "service_worker": "worker.js"
+  },
+  "side_panel": {
+    "default_path": "panel.html"
+  },
+  "incognito": "not_allowed"
+}

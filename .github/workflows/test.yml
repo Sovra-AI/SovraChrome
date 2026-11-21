@@ -1,0 +1,22 @@
+name: Test
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  bridge:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+        with:
+          version: "0.12.9"
+      - run: uv sync --frozen --python 3.12
+      - run: .venv/bin/python -m unittest discover -s tests
+      - if: runner.os == 'Linux'
+        run: .venv/bin/playwright install --with-deps --no-shell chromium
+      - if: runner.os == 'Linux'
+        run: xvfb-run -a .venv/bin/python tests/browser.py
