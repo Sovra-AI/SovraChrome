@@ -78,20 +78,31 @@ class Panel:
 
 
 async def open_panel(ctx, page):
-    worker = ctx.service_workers[0] if ctx.service_workers else await ctx.wait_for_event("serviceworker")
+    worker_path = "/worker.js"
+    worker = next((w for w in ctx.service_workers if w.url.endswith(worker_path)), None)
+    if not worker:
+        worker = await ctx.wait_for_event("serviceworker", predicate=lambda w: w.url.endswith(worker_path))
+    async with asyncio.timeout(15):
+        while not await worker.evaluate("chrome.action.onClicked.hasListeners()"):
+            await asyncio.sleep(0.05)
+    await page.bring_to_front()
     cdp = await ctx.browser.new_browser_cdp_session()
     tabs = await cdp.send("Target.getTargets", {"filter": [{"type": "tab"}]})
     tab = next(item for item in tabs["targetInfos"] if item["url"] == page.url)
     extension_id = worker.url.split("/")[2]
     await cdp.send("Extensions.triggerAction", {"id": extension_id, "targetId": tab["targetId"]})
     panel_url = f"chrome-extension://{extension_id}/panel.html"
-    async with asyncio.timeout(8):
-        while True:
-            targets = (await cdp.send("Target.getTargets"))["targetInfos"]
-            panel = next((item for item in targets if item["url"] == panel_url), None)
-            if panel:
-                break
-            await asyncio.sleep(0.05)
+    try:
+        async with asyncio.timeout(20):
+            while True:
+                targets = (await cdp.send("Target.getTargets"))["targetInfos"]
+                panel = next((item for item in targets if item["url"] == panel_url), None)
+                if panel:
+                    break
+                await asyncio.sleep(0.05)
+    except TimeoutError:
+        contexts = await worker.evaluate("chrome.runtime.getContexts({}).then(a => a.map(c => [c.contextType,c.documentUrl]))")
+        raise AssertionError(f"Panel failed to open. Targets: {[(t['type'], t['url']) for t in targets]}; contexts: {contexts}") from None
     session = await cdp.send("Target.attachToTarget", {"targetId": panel["targetId"]})
     driver = Panel(cdp, session["sessionId"])
     await driver.wait("document.readyState === 'complete'")
